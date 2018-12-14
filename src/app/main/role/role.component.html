@@ -1,0 +1,112 @@
+<section class="content-header">
+  <h1>
+    SYSTEME
+    <small>Configurations</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="#">Systeme</a></li>
+    <li class="active">Groupe User</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Liste de groupes des users</h3>
+          <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="filter" [(ngModel)]="filter" class="form-control pull-right" (keyup.enter)="loadData()" placeholder="Search">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" (click)="loadData()"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          <br />
+          <br />
+          <div style="width: 10%">
+            <button type="button" class="btn btn-block btn-success" (click)="ShowAddModal()">Ajouter un groupe</button>
+          </div>
+        </div>
+        <!-- <div class="clearfix"></div>   -->
+
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Code Groupe</th>
+                <th>Nom Groupe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let role of roles">
+                <td>{{role.Name}}</td>
+                <td>{{role.Description}}</td>
+                <td>
+                  <button class='btn btn-primary' (click)="ShowEditModal(role.Id)"><i class='fa fa-pencil-square-o'></i></button>
+                  <button class='btn btn-danger' (click)="DeleteItem(role.Id)"><i class='fa fa-trash'></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-md-12">
+            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+              [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;"
+              firstText="&laquo;" lastText="&raquo;"></pagination>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Ajouter/Modifier Groupe des users</h4>
+        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nom Groupe</label>
+              <input type="hidden" class="form-control" [(ngModel)]="entity.Id" name="id">
+              <input type="text" #name="ngModel" class="form-control" [(ngModel)]="entity.Name" required minlength="3"
+                name="name">
+              <small [hidden]="name.valid||(name.pristine&&!addEditForm.submitted)" class="text-danger">
+                Il faut renseigner au moins 3 charactères
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input type="text" #description="" class="form-control" [(ngModel)]="entity.Description" required name="description">
+              <small [hidden]="description.valid||(description.pristine&&!addEditForm.submitted)" class="text-danger">
+                il faut renseigner la description
+              </small>
+            </div>
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer">
+            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Update</button>
+            <div class="divider"></div>
+            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Abandonner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

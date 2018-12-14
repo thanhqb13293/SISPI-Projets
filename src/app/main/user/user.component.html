@@ -1,0 +1,149 @@
+<section class="content-header">
+  <h1>
+    SYSTEME
+    <small>Configurations</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="#">Systeme</a></li>
+    <li class="active">Users</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Liste des utilisateurs</h3>
+          <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="filter" [(ngModel)]="filter" class="form-control pull-right" (keyup.enter)="loadData()"
+                placeholder="Search">
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="loadData()"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+          <br />
+          <br />
+          <div style="width: 15%">
+            <button type="button" class="btn btn-block btn-success" (click)="ShowAddModal()">Ajouter un utilisateur</button>
+          </div>
+        </div>
+        <!-- <div class="clearfix"></div>   -->
+
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Nom User</th>
+                <th>Email</th>
+                <th data-type="date" data-format-string="DD MMMM YYYY">Birthday</th>
+                <th>Télephone</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>{{user.UserName}}</td>
+                <td>{{user.FullName}}</td>
+                <td>{{user.Email}}</td>
+                <td>{{user.BirthDay}}</td>
+                <td>{{user.PhoneNumber}}</td>
+                <td>
+                  <button class='btn btn-primary' (click)="ShowEditModal(user.Id)"><i class='fa fa-pencil-square-o'></i></button>
+                  <button class='btn btn-danger' (click)="DeleteItem(user.Id)"><i class='fa fa-trash'></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-md-12">
+            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+              [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;"
+              firstText="&laquo;" lastText="&raquo;"></pagination>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Ajout/Modification d'un utilisateur</h4>
+        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Compte d'utilisateur</label>
+              <input type="hidden" class="form-control" [(ngModel)]="entity.Id" name="id">
+              <input type="text" #username="ngModel" class="form-control" [(ngModel)]="entity.UserName" required name="username">
+              <small [hidden]="username.valid||(username.pristine&&!addEditForm.submitted)" class="text-danger">
+                Il faut saisir un compte d'utilisateur
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nom de l'utilisateur</label>
+              <input type="text" #fullName="ngModel" class="form-control" [(ngModel)]="entity.FullName" required name="fullName">
+              <small [hidden]="fullName.valid||(fullName.pristine&&!addEditForm.submitted)" class="text-danger">
+                Il faut saisir le nom d'utilisateur
+              </small>
+            </div>
+            <div class="form-group" *ngIf="!entity.Id">
+              <label for="exampleInputEmail1">Mot de passe</label>
+              <input type="password" #password="ngModel" [(ngModel)]="entity.Password" required minlength="6" name="password"
+                class="form-control">
+              <small [hidden]="password.valid || (password.pristine && !addEditForm.submitted)" class="text-danger">
+                le mot de passe contient au moins 6 charatères
+              </small>
+            </div>
+            <div class="form-group" *ngIf="!entity.Id">
+              <label for="exampleInputEmail1">Confirmer le mot de passe</label>
+              <input type="password" #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required
+                validateEqual="password" minlength="6" name="confirmpassword" class="form-control">
+              <small [hidden]="confirmpassword.valid || (confirmpassword.pristine && !addEditForm.submitted)" class="text-danger">
+                Confimation de mot de passe incorrect
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="text" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.Email"
+                required name="email" class="form-control">
+              <small [hidden]="email.valid || (email.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập email
+              </small>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Groupe d'utilisateur</label>
+              <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="allRoles" [(ngModel)]="entity.Roles" stopScrollPropagation="true"></ss-multiselect-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-footer">
+            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Update</button>
+            <div class="divider"></div>
+            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Abandonner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

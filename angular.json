@@ -23,9 +23,24 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/ionicons/dist/css/ionicons.min.css",
+              "src/assets/css/AdminLTE.css",
+              "src/assets/css/_all-skins.min.css",
+              "node_modules/alertifyjs/build/css/alertify.css",
+              "node_modules/alertifyjs/build/css/themes/default.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery-slimscroll/jquery.slimscroll.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/fastclick/lib/fastclick.js",             
+              "src/assets/js/adminlte.min.js",
+              "src/assets/js/demo.js",
+              "node_modules/alertifyjs/build/alertify.js"
+            ]
           },
           "configurations": {
             "production": {
